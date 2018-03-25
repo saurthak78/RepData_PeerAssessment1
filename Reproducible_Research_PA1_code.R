@@ -18,23 +18,31 @@ library(ggplot2)
 library(dplyr)
 #
 activity <- read.csv("./data/activity.csv", header = TRUE)
-#creating a back up
-original_activity <- activity
-# replacing the "NA" with "0"]
-activity$steps[ is.na(activity$steps)] <- 0
-# changing the date in the df from factor to date.
-activity$date <- as.Date(activity$date)
 # aggregating the number of steps taken per day
 daily_activity <- aggregate(steps~date, activity, sum)
 # plotting the histogram of the number of steps taken per day 
 ggplot(daily_activity, aes(steps)) + 
-        geom_histogram(fill = "skyblue", color = "black",
-                       binwidth = 2000) +
+        geom_histogram(fill = "pink", color = "black", binwidth = 2000) +
                        labs(x = "Daily steps",
                             title = "Total number of steps taken each day")
+#calculate the mean and median of the daily steps taken.
+mean_daily_act <- mean(daily_activity$steps, na.rm = TRUE)
+median_daily_act <- median(daily_activity$steps, na.rm = TRUE)
+#time series plot of the steps taken at 5 min intervals.
+min_inter_steps <- aggregate(steps~interval, activity, mean)
+# plot
+ggplot(min_inter_steps,aes(interval)) +
+        geom_line(aes(y = steps),color = "purple") +
+        labs(x = "5 min intervals",
+             y = "average steps",
+             title = "5 min interval plot")
 #
-mean_daily_act <- aggregate(steps~date, daily_activity, mean)
-median_daily_act <- aggregate(steps~date, activity, median)
-median_act <- median(activity$steps, na.rm = FALSE)
+max_steps <- min_inter_steps[which.max(min_inter_steps$steps),]$interval
+#
 
+
+
+
+# replacing the "NA" with "0"]
+activity$steps[ is.na(activity$steps)] <- 0
 

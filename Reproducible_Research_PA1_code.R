@@ -39,10 +39,27 @@ ggplot(min_inter_steps,aes(interval)) +
 #
 max_steps <- min_inter_steps[which.max(min_inter_steps$steps),]$interval
 #
+#counting the "NA" present in the data.
+sum(is.na(activity$steps))
+
+# replacing the "NA" with mean of the interval]
+mod_activity <- activity
+
+for (i in 1:nrow(mod_activity))
+        {
+        if(is.na(mod_activity$steps[i]))
+                {
+                print(min_inter_steps[which(mod_activity$interval[i] == min_inter_steps$interval),]$steps)
+                mod_activity$steps[i] <- min_inter_steps[which(mod_activity$interval[i] == min_inter_steps$interval),]$steps
+                print(mod_activity$steps[i])
+                }
+        }
 
 
 
 
-# replacing the "NA" with "0"]
-activity$steps[ is.na(activity$steps)] <- 0
+
+
+
+
 
